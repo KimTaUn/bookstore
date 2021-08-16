@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% comment %} add css {% endcomment %}
+{% load static %}
+
+{% comment %} <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}"> {% endcomment %}
+
+{% block nav_title %}
+    LOGIN
+{% endblock nav_title %}
+
+{% comment %} START CONTENT {% endcomment %}
+{% block content %}
+
+{% if next %}
+{% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+{% else %}
+<p class="text-center">Please login to see this page.</p>
+{% endif %}
+{% endif %}
+
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-3 mx-auto">
+    <form class="col-lg-6 mx-auto" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="card2 card border-0 px-4 py-2">
+            <div class="mb-4 px-3">
+                <div class="text-center mb-0 mt-2 fw-bold">Sign in with</div>
+                <div class="row justify-content-center">
+                    <div class="facebook text-center mx-1">
+                        <div class="fa fa-facebook"></div>
+                    </div>
+                    <div class="twitter text-center mx-1">
+                        <div class="fa fa-twitter"></div>
+                    </div>
+                    <div class="linkedin text-center mx-1">
+                        <div class="fa fa-linkedin"></div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row mb-4">
+                <div class="line"></div>
+                <small class="or text-center">Or</small>
+                <div class="line"></div>
+            </div>
+
+            <div class="row px-3"> <label class="mb-1">
+                    <h6 class="mb-0 text-sm">Email Address</h6>
+                    <div>{{ form.username }}</div>
+            </div>
+            <div class="row px-3"> <label class="mb-1">
+                    <h6 class="mb-0 text-sm">Password</h6>
+                    <div>{{ form.password }}</div>
+            </div>
+            <div class="row justify-content-center px-3 mb-4">
+                <div class="">
+                    <label for="chk1" class="custom-control-label text-sm">Remember me</label>
+                    <input id="chk1" type="checkbox" name="chk" class="custom-control-input">
+                </div>
+                <a href="{% url 'password_reset' %}" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+            </div>
+            <div class="row mb-3 px-3">
+                <input type="submit" class="btn btn-blue text-center" value="login">
+                <input type="hidden" name="next" value="{{ next }}">
+            </div>
+            {% if form.errors %}
+                <p class="fs-6 text-danger fst-italic">Your username and password didn't match. Please try again.</p>
+            {% endif %}
+            <div class="row mb-4 px-3"> <small class="font-weight-bold">Don't have an account? <a
+                        class="text-danger ">Register</a></small> </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

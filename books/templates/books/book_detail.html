@@ -1,0 +1,78 @@
+
+{% extends "base.html"%}
+
+{% load static %}
+
+{% block title %}Book Detail{% endblock %} 
+
+<link rel="stylesheet" type="text/css" href="{% static '/css/book.css' %}">
+
+{% block nav_title %}
+  {{ book.title }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-5">
+
+  <div class="d-flex">
+    <div class="me-5">
+      <img src="{{ book.image.url}}" width="200px" alt="" />
+    </div>
+    <div>
+      <dl class="row">
+        <dt class="col-sm-3">About</dt>
+        <dd class="col-sm-9">{{ book.shortDescription}}</dd>
+        <dt class="col-sm-3">Pages</dt>
+        <dd class="col-sm-9">
+          <p>{{ book.pageCount }}</p>
+        </dd>
+        <dt class="col-sm-3">Author</dt>
+        <dd class="col-sm-9">
+        <div>
+          {% for author in authors %}
+            <a href = {% url 'author.book' author %}>{{ author }}</a>,
+          {% endfor %}
+        </div>
+        </dd>
+        <dt class="col-sm-3">Another term</dt>
+        <dd class="col-sm-9">{{ book.longDescription }}</dd>
+      </dl>
+
+      {% comment %} REIVEW FORM {% endcomment %}
+      {% if user.is_authenticated %}
+      <form class="mt-3" method="POST" action="{% url 'book.review' book.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <div class="d-flex flex-row-reverse">
+          <button type="submit" class="btn btn-primary mt-1">Submit</button>
+        </div>
+      </form>
+      {% else %}
+      <p>
+        <a href="{% url 'login' %}?next={{ request.path }}" class="text-primary text-decoration-underline">Login</a> to write review
+      </p>
+      {% endif %}
+
+      <div>
+        {% for review in reviews %}
+          <figure>
+            <blockquote class="blockquote">
+              <p>{{ review.body }}</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+              {{ review.user }} <cite title="Source Title">{{ review.created_at }}</cite>
+            </figcaption>
+            {% if review.image %}
+              <img src="{{ review.image.url }}" class="img-fluid rounded" width="100">
+            {% endif %}
+            {% comment %} <img src="{{ review.image }}" class="img-fluid rounded" width="100"> {% endcomment %}
+          </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
