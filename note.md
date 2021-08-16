@@ -1,0 +1,1 @@
+pip freeze : show dependencies

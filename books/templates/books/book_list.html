@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block nav_title %}
+BOOK's List
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row">
+    {% for book in book_list %}
+    <div class="col-3 mb-3">
+      <!-- <div class="card h-100"> -->
+      <div class="card" style="width: auto; border: none">
+        <img
+          src="{{ book.image.url }}"
+          class="card-img-top img-fluid img-thumbnail"
+          alt="..."
+        />
+        <div class="card-body">
+          <h5 class="card-title" style="height: 48px">{{ book.title }}</h5>
+
+          <p class="card-text fst-italic text-truncate" style="height: 48px">
+            Description: {{ book.shortDescription }}
+          </p>
+          <!-- <a href="/book/{{ book.id }}" class="btn btn-primary">Go Detail</a> -->
+          <a href="{% url 'bookDetail' book.id %}" class="btn btn-primary"
+            >Go Detail</a
+          >
+        </div>
+      </div>
+      <!-- </div> -->
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
